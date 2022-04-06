@@ -1,20 +1,21 @@
 package com.vxplore.audiovideocall.videocall.presentation.composables
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.vxplore.audiovideocall.videocall.presentation.viewmodels.VideoViewModel
 import com.vxplore.audiovideocall.videocall.models.Layout
+import com.vxplore.audiovideocall.videocall.presentation.viewmodels.VideoViewModel
 
 fun BoxScope.getRemoteModifier(
     viewModel: VideoViewModel,
     configuration: Configuration
 ): Modifier {
+    val w = configuration.screenWidthDp
+    val h = configuration.screenHeightDp
+    val s = w.coerceAtMost(h)*0.25f
     return when(viewModel.layout.value){
         Layout.SPLIT -> Modifier
             .fillMaxWidth(if(configuration.orientation== Configuration.ORIENTATION_LANDSCAPE) 0.5f else 1f)
@@ -29,8 +30,8 @@ fun BoxScope.getRemoteModifier(
                 }
             )
         Layout.REMOTE_SMALL -> Modifier
-            .fillMaxWidth(0.45f)
-            .fillMaxHeight(0.4f)
+            .width(s.dp)
+            .aspectRatio(9/16f)
             .align(Alignment.TopEnd)
             .zIndex(1f)
         Layout.LOCAL_SMALL -> Modifier

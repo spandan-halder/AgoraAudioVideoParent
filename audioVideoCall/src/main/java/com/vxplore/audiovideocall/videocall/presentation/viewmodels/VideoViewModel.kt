@@ -106,8 +106,6 @@ class VideoViewModel @Inject constructor(
     override fun onDestroy(isChangingConfiguration: Boolean) {
         if(!isChangingConfiguration){
             leaveChannel()
-            leave.value = true
-            VideoBox._destroy()
         }
     }
 
@@ -136,6 +134,9 @@ class VideoViewModel @Inject constructor(
                 Action.ALLOWED -> {
                     onAllowedFromServer(it)
                 }
+                Action.FAILED -> {
+                    onFailedFromServer(it)
+                }
                 Action.NOT_ENOUGH_TIME -> {
                     _allowanceLoading.value = false
                 }
@@ -147,6 +148,10 @@ class VideoViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    private fun onFailedFromServer(it: Command) {
+        endCall()
     }
 
     private suspend fun onAllowedFromServer(it: Command) {
@@ -324,6 +329,10 @@ class VideoViewModel @Inject constructor(
         timerJob?.cancel()
         timerJob = null
         destroy()
+        VideoBox._destroy()
+        viewModelScope.launch {
+            leave.value = true
+        }
     }
 
     val remoteUserSession = mutableStateOf(RemoteSession())

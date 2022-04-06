@@ -5,8 +5,6 @@ import com.vxplore.audiovideocall.videocall.presentation.viewmodels.VideoViewMod
 
 @Composable
 fun CallScreen(viewModel: VideoViewModel) {
-    HandleFinishActivity(viewModel)
-
     if(!viewModel.leave.value){
         VideoAndUserControls(viewModel)
     }
