@@ -25,7 +25,7 @@ class VideoBox {
         private var _running = false
         val running: Boolean
         get() = _running
-        fun start(activity: Activity, channelId: String, userId: String){
+        fun start(activity: Activity, channelId: String, userId: String, requiredFlags: Int = 0){
             if(_running){
                 throw Exception("Video box is already running")
             }
@@ -33,6 +33,7 @@ class VideoBox {
             activity.startActivity(
                 Intent(activity, VideoActivity::class.java)
                     .apply {
+                        flags = requiredFlags
                         putExtra(Keys.ChannelId.name,channelId)
                         putExtra(Keys.UserId.name,userId)
                     }
